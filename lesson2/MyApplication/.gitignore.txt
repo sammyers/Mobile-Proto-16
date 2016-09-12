@@ -1,0 +1,11 @@
+.gradle
+.idea
+app
+build
+gradle
+build.gradle
+gradle.properties
+gradlew
+local.properties
+MyApplication.iml
+settings.gradle
