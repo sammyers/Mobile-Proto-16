@@ -1,6 +1,7 @@
 package mobile_proto_16.com.myapplication;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -24,8 +25,6 @@ import butterknife.ButterKnife;
 
 import org.json.JSONException;
 
-import java.io.Console;
-
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -40,9 +39,13 @@ public class MainActivityFragment extends Fragment {
     private Response.Listener<String> responseListener = new Response.Listener<String>() {
         @Override
         public void onResponse(String response) {
-            // YOUR CODE HERE. DO SOMETHING WHEN A RESPONSE COMES IN.
-            // Hint: remove the first three characters, parse the response into a JSONArray,
-            // and pass it into your extractPriceFromJSON() function.
+            try {
+                final JSONArray jsonData = new JSONArray(response.substring(3));
+                final String amount = extractPriceFromJSON(jsonData);
+                price.setText(amount);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     };
 
@@ -54,8 +57,7 @@ public class MainActivityFragment extends Fragment {
         }
     };
 
-    public MainActivityFragment() {
-    }
+    public MainActivityFragment() { }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,11 +70,9 @@ public class MainActivityFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = buildSearchURL(input.getText().toString());
-                // YOUR CODE HERE.
-                //
-                // Create a StringRequest using the URL and the listeners declared above.
-                // Add the request to your RequestQueue from your MySingleton class
+                final String url = buildSearchURL(input.getText().toString());
+                final StringRequest stringRequest = new StringRequest(Request.Method.GET, url, responseListener, errorListener);
+                MySingleton.getInstance(c).addToRequestQueue(stringRequest);
             }
         });
 
@@ -80,14 +80,19 @@ public class MainActivityFragment extends Fragment {
     }
 
     private String buildSearchURL(String companyTicker) {
-        // YOUR CODE HERE
-        // USE URIBuilder
-        return "";
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("http")
+                .authority("finance.google.com")
+                .appendPath("finance")
+                .appendPath("info")
+                .appendQueryParameter("client", "iq")
+                .appendQueryParameter("q", companyTicker);
+        return builder.build().toString();
     }
 
     private String extractPriceFromJSON(JSONArray array) throws JSONException {
-        // Your code here. Extract the price value from the JSON array
-        return "";
+        // Get the 0th element of the array, find the price value (has key "l")
+        return array.getJSONObject(0).getString("l");
     }
 
 }

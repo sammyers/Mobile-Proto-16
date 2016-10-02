@@ -12,7 +12,7 @@
     tools:showIn="@layout/activity_main">
 
     <EditText
-        android:layout_width="100dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -44,6 +44,6 @@
         android:layout_alignStart="@+id/input"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="67dp"
+        android:layout_marginTop="27dp"
         android:id="@+id/price" />
 </RelativeLayout>
