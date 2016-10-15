@@ -36,10 +36,12 @@ public class MainActivityFragment extends Fragment {
 
     private final String TAG = this.getClass().getName();
 
+    // Nice, declaring these classes makes code very clean
     private Response.Listener<String> responseListener = new Response.Listener<String>() {
         @Override
         public void onResponse(String response) {
             try {
+                // Is it guaranteed that the response will always have length >= 3?
                 final JSONArray jsonData = new JSONArray(response.substring(3));
                 final String amount = extractPriceFromJSON(jsonData);
                 price.setText(amount);
@@ -81,6 +83,7 @@ public class MainActivityFragment extends Fragment {
 
     private String buildSearchURL(String companyTicker) {
         Uri.Builder builder = new Uri.Builder();
+        // +1 Using Uri Builder
         builder.scheme("http")
                 .authority("finance.google.com")
                 .appendPath("finance")
